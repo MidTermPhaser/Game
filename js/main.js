@@ -4,9 +4,12 @@ var main ={
         game.load.image('ground','assets/platform.png');
         //player
         game.load.spritesheet('dude','assets/dude.png',32,48)
+        //star
+        game.load.image('star','assets/star.png')
     },
     
     create: function(){
+        //bg
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.add.image(0, 0, 'sky');
   
@@ -33,10 +36,24 @@ var main ={
         this.player.animations.add('right',[5,6,7,8],10,true)
         
         this.cursors = game.input.keyboard.createCursorKeys()
+        
+        
+        //star
+        this.stars=game.add.group()
+        this.stars.enableBody=true
+        for(var i=0;i<12;i++){
+            var star=this.stars.create(i*70,0,'star')
+            star.body.gravity.y=20
+            star.body.bounce.y=0.8+Math.random()*0.2
+        }
+        //score
+        this.score=0
+        this.scoreText=game.add.text(16,16,'分數:0',{fontSize:'24px',fill:'#000'})
      },
     
     update: function(){
-       game.physics.arcade.collide(this.player,this.platforms)
+       //playermov
+        game.physics.arcade.collide(this.player,this.platforms)
         
         this.player.body.velocity.x = 0
         if(this.cursors.left.isDown){
@@ -55,6 +72,16 @@ var main ={
         if(this.cursors.up.isDown && this.player.body.touching.down){
             this.player.body.velocity.y = -350
         }
+        
+        
+        //star
+        game.physics.arcade.collide(this.stars,this.platforms)
+        game.physics.arcade.overlap(this.player,this.stars,this.collectStar,null,this)
+    },
+    collectStar: function(player,star){
+        star.kill()
+        this.score+=10
+        this.scoreText.text='分數:'+this.score
     },
 }
 
