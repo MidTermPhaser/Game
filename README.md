@@ -15,3 +15,6 @@
 ![image](/image/3-4.png)
 ## 完成
 ![image](/image/finish.png)
+## 測試環境
+[brackets]http://brackets.io/)
+![image](/assets/bracket.png)
